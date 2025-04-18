@@ -1,0 +1,138 @@
+(defpoll battery_status :interval "1s" `acpi -b`)
+(defpoll volume :interval "0.1s" `wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{ print $2 }'`)
+(defpoll muted :interval "0.1s" `wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{ print $3 }'`)
+;; (defpoll bright :interval "0.1s" `brightnessctl get`)
+
+(defwidget icon [path]
+    (image 
+        :class "icon"
+        :path {path}
+    )
+)
+
+(defwindow battery
+    :monitor 0
+    :geometry 
+        (geometry
+            :x "0.54%"
+            :y "10px"
+            :width "5.5%"
+            :height "3.7%"
+            :anchor "top left"
+        )
+
+    (box
+        :tooltip {battery_status}
+        :class "widget battery"
+        :space-evenly false
+        :spacing 10
+        (icon :path { EWW_BATTERY.BAT0.status == "Charging" ? "icons/bolt.svg" : "icons/battery.svg" })
+        (label :text "${ EWW_BATTERY.BAT0.capacity }%")
+    )
+)
+
+(defwindow volume
+    :monitor 0
+    :geometry 
+        (geometry 
+            :x "6.54%"
+            :y "10px"
+            :width "5.5%"
+            :height "3.7%"
+            :anchor "top left"
+        )
+
+    (box
+        :class "widget cpu"
+        :space-evenly false
+        :spacing 10
+        (icon :path { muted == "[MUTED]" ? "icons/muted.svg" : "icons/volume.svg" })
+        (label :text "${ volume * 100 }%")
+    )
+)
+
+;; (defwindow bright
+;;     :monitor 0
+;;     :geometry 
+;;         (geometry 
+;;             :x "12.56%"
+;;             :y "10px"
+;;             :width "5.5%"
+;;             :height "3.7%"
+;;             :anchor "top left"
+;;         )
+;;
+;;     (eventbox
+;;         :onscroll "lua scripts/brightness.lua {}"
+;;         
+;;         (box
+;;             :class "widget bright"
+;;             :space-evenly false
+;;             :spacing 10
+;;             (icon :path "icons/sun.svg")
+;;             (label :text "${ round(bright * 100 / 255, 0) }%")
+;;         )
+;;     )
+;; )
+
+(defwindow clock
+    :monitor 0
+    :geometry 
+        (geometry
+            :x "0px"
+            :y "10px"
+            :width "11.6%"
+            :height "3.7%"
+            :anchor "top center"
+        )
+        
+    (box
+        :class "widget time"
+        :space-evenly false
+        :spacing 10
+        (icon :path "icons/clock.svg")
+        (label :text { formattime(EWW_TIME, "%H:%M %b %d %y %a") })
+    )
+)
+
+
+(defwindow memory
+    :monitor 0
+    :geometry 
+        (geometry 
+            :x "6.54%"
+            :y "10px"
+            :width "5.5%"
+            :height "3.7%"
+            :anchor "top right"
+        )
+
+    (box
+        :class "widget memory"
+        :space-evenly false
+        :spacing 10
+        (icon :path "icons/memory.svg")
+        (label :text "${ round(EWW_RAM.used_mem_perc,0) }%")
+    )
+)
+
+(defwindow cpu
+    :monitor 0
+    :geometry 
+        (geometry
+            :x "0.54%"
+            :y "10px"
+            :width "5.5%"
+            :height "3.7%"
+            :anchor "top right"
+        )
+
+    (box
+        :class "widget cpu"
+        :space-evenly false
+        :spacing 10
+        (icon :path "icons/cpu.svg")
+        (label :text "${ round(EWW_CPU.avg, 0) }%")
+    )
+)
+
