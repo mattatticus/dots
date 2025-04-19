@@ -47,7 +47,7 @@
         :space-evenly false
         :spacing 10
         (icon :path { muted == "[MUTED]" ? "icons/muted.svg" : "icons/volume.svg" })
-        (label :text "${ volume * 100 }%")
+        (label :text "${ round(volume * 100, 0) }%")
     )
 )
 
