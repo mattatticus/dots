@@ -6,9 +6,9 @@ function fish_greeting
 end
 
 alias vi nvim
-alias e 'exa --icons'
-alias ea 'exa --icons -a'
-alias el 'exa --icons -la'
+alias e 'eza --icons'
+alias ea 'eza --icons -a'
+alias el 'eza --icons -la'
 
 set -gx EDITOR nvim
 
