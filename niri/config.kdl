@@ -30,8 +30,6 @@ overview {
 }
 
 input {
-    disable-power-key-handling
-
     keyboard { }
 
     touchpad {
