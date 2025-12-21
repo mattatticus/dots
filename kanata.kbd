@@ -1,0 +1,68 @@
+(include keyboards.kbd)
+
+(defcfg
+    process-unmapped-keys yes
+    
+    ;;linux-dev-names-include $keyboards-includes
+    linux-dev-names-exclude ( "ELAN071A:00 04F3:30FD Touchpad" )
+)
+
+(defsrc
+    mlft mmid mrgt mfwd mbck
+
+    grv 1 2 3 4 5 6 7 8 9 0 - = bspc
+    tab q w e r t y u i o p [ ] \
+    caps a s d f g h j k l ; ' ret
+    lsft z x c v b n m , . / rsft
+    lctl lmet lalt spc rmet ralt rctl
+)
+
+(deflayer dworak
+    mlft mmid mrgt lmet lsft
+
+    grv 1 2 3 4 5 6 7 8 9 0 [ ] bspc
+    tab ' , . p y f g c r l / = \
+    @bsft a o e u i d h t n s - ret
+    lalt ; q j k x b m w v z rsft
+    caps lmet lctl spc rmet rctl lalt
+)
+
+(defalias 
+    bsft (tap-hold 0 100 esc lsft)
+)
+
+(defoverrides
+	(0) (lsft 0)
+	(1) (lsft 1)
+	(2) (lsft 2)
+	(3) (lsft 3)
+	(4) (lsft 4)
+	(5) (lsft 5)
+	(6) (lsft 6)
+	(7) (lsft 7)
+	(8) (lsft 8)
+	(9) (lsft 9)
+
+	(lsft 0) (0) 
+	(lsft 1) (1) 
+	(lsft 2) (2) 
+	(lsft 3) (3) 
+	(lsft 4) (4) 
+	(lsft 5) (5) 
+	(lsft 6) (6) 
+	(lsft 7) (7) 
+	(lsft 8) (8) 
+	(lsft 9) (9) 
+
+	(') (lsft ')
+	(lsft ') (')
+
+	(-) (lsft -)
+	(lsft -) (-)
+
+	({) (lsft {)
+	(lsft {) ({)
+
+	(}) (lsft })
+	(lsft }) (})
+)

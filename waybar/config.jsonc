@@ -1,0 +1,99 @@
+// -*- mode: jsonc -*-
+{
+    "height": 40,
+    "spacing": 20,
+    "margin": 10,
+    "exclusive": false,
+
+    "modules-left": [
+        "network",
+        "bluetooth",
+        "backlight",
+        "wireplumber"
+    ],
+
+    "modules-center": [
+        "clock"
+    ],
+
+    "modules-right": [
+        "battery",
+        "cpu",
+        "memory",
+        "disk"
+    ],
+
+    "clock": {
+        "format": "󰥔 {:%H:%M %b %d, %a}",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+
+        "calendar": {
+            "mode"          : "month",
+            "mode-mon-col"  : 3,
+            "weeks-pos"     : "right",
+            "on-scroll"     : 1,
+            "format": {
+                "months":     "<span color='#ffead3'><b>{}</b></span>",
+                "days":       "<span color='#ecc6d9'><b>{}</b></span>",
+                "weeks":      "<span color='#99ffdd'><b>W{}</b></span>",
+                "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
+                "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
+            }
+        }
+    },
+    "disk": {
+        "format": "󱛟 {percentage_used}%"
+    },
+    "cpu": {
+        "interval": 1,
+        "format": "󰍛 {usage}%",
+        "tooltip": false
+    },
+    "memory": {
+        "format": " {}%"
+    },
+    "backlight": {
+        "format": " {percent}%",
+        "reverse-scrolling": true
+    },
+    "battery": {
+        "interval": 10,
+        "states": {
+            "low": 20
+        },
+        "format": "{icon}{capacity}%",
+        "format-full": "{icon}{capacity}%",
+        "format-charging": "󱐌 {capacity}%",
+        "format-plugged": " {capacity}%",
+        "format-alt": "{icon} {time}",
+        "format-icons": [" ", " ", " ", " ", " "]
+    },
+    "network": {
+        "interval": 30,
+        "format-wifi": "{icon}{essid}",
+        "format-icons": ["󰤯 ", "󰤟 ", "󰤢 ", "󰤥 ", "󰤨 "],
+        "format-ethernet": "󰈀 {ipaddr}/{cidr}",
+        "format-disconnected": "{icon}Disconnected",
+        "tooltip-format": "{signalStrength}% {ifname} via {gwaddr}",
+        "format-linked": "{ifname} (No IP)",
+
+        "on-click": "kitty impala"
+    },
+    "bluetooth": {
+        "interval": 5,
+        "format": " Disconnected",
+        "format-off": "󰂲 Off",
+        "format-connected": "󰂰:{num_connections} {device_alias}",
+
+        "on-click": "kitty bluetui"
+    },
+    "wireplumber": {
+        "min-length": 5,
+        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "on-right-click": "helvum",
+        "format": "{icon}{volume}%",
+        "format-muted": " {volume}%",
+        "format-icons": [" ", " ", " "],
+        "reverse-scrolling": 1
+    }
+}
