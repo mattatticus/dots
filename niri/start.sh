@@ -1,15 +1,16 @@
-#!/bin/bash
+#!/bin/fish
 
-swaybg -i ~/.config/niri/wall.jpg &
-# swaybg -i ~/Downloads/DvZl9bv.jpeg
-# swaybg -i ~/Downloads/blue_arch_nowatermark.png
-xwayland-satellite :2 &
+hyprlax &
 
-# eww open-many battery volume bright clock memory cpu &
-# eww open-many battery volume clock memory cpu &
-waybar &
+mako &
+eww open bar
+systembus-notify &
 
-# walker --gapplication-service --modules applications,runner &
-dunst &
+kitty -1 --instance-group=main --start-as=hidden &
 
-kitty --single-instance --instance-group=main --start-as=hidden
+zlaunch &
+
+tomat daemon start
+
+# hyprlax ctl add (random choice ~/Pictures/Wallpapers/*) scale=2
+hyprlax ctl add ~/Pictures/Wallpapers/Shack_In_Field_Enhanced.jpg scale=2
