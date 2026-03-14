@@ -12,5 +12,4 @@ zlaunch &
 
 tomat daemon start
 
-# hyprlax ctl add (random choice ~/Pictures/Wallpapers/*) scale=2
 hyprlax ctl add ~/Pictures/Wallpapers/Shack_In_Field_Enhanced.jpg scale=2

@@ -1,4 +1,5 @@
 .git*
-kanata*
 README.md
 LICENSE.txt
+kanata.kbd
+kanata.service

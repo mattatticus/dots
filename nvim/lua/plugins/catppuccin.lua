@@ -1,40 +1,10 @@
-vim.pack.add {
-    "https://github.com/catppuccin/nvim",
-    "https://github.com/nvimdev/indentmini.nvim",
-
-    {
-        version = "main",
-        src = "https://github.com/nvim-treesitter/nvim-treesitter",
-    }
+local M = {
+    "catppuccin/nvim",
+    lazy = false,
+    name = "catppuccin"
 }
 
-local parsers = {
-    "c",
-    "cpp",
-    "lua",
-    "zig",
-    "fish",
-    "python",
-}
-
-local ts = require "nvim-treesitter"
-ts.install(parsers)
-
-vim.api.nvim_create_augroup("Treesitter", {})
-vim.api.nvim_create_autocmd(
-    "FileType",
-    {
-        pattern = parsers,
-        group = "Treesitter",
-        callback = function()
-            vim.treesitter.start()
-            vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-            vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-        end
-    }
-)
-
-require "catppuccin".setup {
+M.opts = {
     flavour = "mocha",
     transparent_background = false,
     float = {
@@ -79,17 +49,23 @@ require "catppuccin".setup {
             background = true,
         },
     },
-    integrations = {},
+    integrations = {
+        artio = true,
+
+        snacks = {
+            enabled = true,
+            indent_scope_color = "blue", -- catppuccin color (eg. `lavender`) Default: overlay2
+        },
+    },
     color_overrides = {},
     custom_highlights = {},
     auto_integrations = false,
     default_integrations = true,
 }
 
--- setup must be called before loading
-vim.cmd.colorscheme "catppuccin"
+function M.config(_, opts)
+    require "catppuccin".setup(opts)
+    require "catppuccin".load()
+end
 
-require "indentmini".setup()
-
-vim.cmd.highlight('IndentLine guifg=#45475a')
-vim.cmd.highlight('IndentLineCurrent guifg=#89b4fa')
+return M
