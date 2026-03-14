@@ -1,0 +1,22 @@
+#!/bin/fish
+
+set -l DEVICE amdgpu_bl1
+set -l BRIGHTNESS_FILE /sys/class/backlight/$DEVICE/brightness
+set -l MAX_BRIGHTNESS_FILE /sys/class/backlight/$DEVICE/max_brightness
+
+switch $argv[1]
+    case "watch"
+        set -l N (cat $BRIGHTNESS_FILE)
+        set -l D (cat $MAX_BRIGHTNESS_FILE)
+        echo (math "round ((100 * $N) / $D)")
+
+        inotifywait -m -e modify $BRIGHTNESS_FILE 2>/dev/null | while read -r event file; 
+            set -l N (cat $BRIGHTNESS_FILE)
+            set -l D (cat $MAX_BRIGHTNESS_FILE)
+            echo (math "round ((100 * $N) / $D)")
+        end
+    case "up"
+        brightnessctl s 1%-
+    case "down"
+        brightnessctl s +1%
+end

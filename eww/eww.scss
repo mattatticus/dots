@@ -1,0 +1,59 @@
+* {
+  all: unset;
+  transition: 0.5s;
+}
+
+$accent: #afafff;
+$background: rgba(0,0,0,0.5);
+
+.icon {
+  font-family: "Maple Mono";
+}
+
+.main {
+  font-size: 18px;
+  padding: 5px 5px;
+  font-family: "Maple Mono";
+  border-radius: 5px;
+  background: $background;
+}
+
+.widget {
+  color: $accent;
+  padding: 0 25px;
+  font-weight: 700;
+  border-radius: 5px;
+  background: rgba(0,0,0,0.35);
+}
+
+.wifi.text,
+.bluetooth.text,
+.brightness.text, 
+.volume.text {
+  margin-left: 10px;
+}
+
+.battery.charging {
+  color: #212132;
+  background: $accent;
+}
+
+.battery.low:not(.charging) {
+  color: #212132;
+  background: rgba(255, 176, 176, 0.8);
+}
+
+progressbar {
+  margin-left: 10px;
+  & > trough {
+    min-width: 75px;
+    border-radius: 5px;
+    background: rgba(0,0,0,0.2);
+
+    & > progress {
+      border-radius: 5px;
+      background-color: $accent;
+    }
+  }
+}
+

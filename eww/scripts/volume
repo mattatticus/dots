@@ -1,0 +1,8 @@
+#!/bin/fish
+
+switch $argv[1]
+    case "up"
+        wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-
+    case "down"
+        wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%+
+end

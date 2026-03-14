@@ -1,0 +1,179 @@
+(defpoll wifi
+    :interval "1s"
+    `iwctl station wlan0 show | grep "Connected network" | awk 'NF>2 {for(i=3;i<=NF;i++) printf "%s ",$i; print ""} END{if(NR==0) print "Disconnected"}'`
+)
+
+(deflisten tomat
+    :inital "{}"
+    `tomat watch`
+)
+
+(defpoll bluetooth
+    :interval "1s"
+    `bluetoothctl info | grep "Name" | awk 'NF {print $2} END {if (NR==0) print "Disconnected"}'`
+)
+
+(deflisten wp
+    `~/.config/eww/scripts/volume.lua`
+)
+
+(deflisten brightness
+    `~/.config/eww/scripts/brightness watch`
+)
+
+(defvar wifi_reveal false)
+(defvar volume_reveal false)
+(defvar bluetooth_reveal false)
+(defvar brightness_reveal false)
+
+(defwindow bar
+    :monitor 0
+    :geometry (geometry
+        :x "0%"
+        :y "8px"
+        :height "45px"
+        :width "1900px"
+        :anchor "top center"
+    )
+    :stacking "fg"
+    :windowtype "dock"
+    :wm-ignore false
+    :reserve (struts :distance "40px" :side "top")
+    (centerbox
+        :class "main"
+        (box
+            :spacing 20
+            :space-evenly false
+            (eventbox
+                :onclick "kitty impala &"
+                :onhover "eww update wifi_reveal=true"
+                :onhoverlost "eww update wifi_reveal=false"
+                (box 
+                    :orientation "h"
+                    :space-evenly false
+                    :class "widget wifi" 
+
+                    (label :class "wifi icon" :text "${wifi == "Disconnected" ? "󰤯" : "󰤨"}")
+
+                    (revealer :transition "slideright" :reveal {wifi_reveal} 
+                        (label :class "wifi text" :text "${wifi}")
+                    )
+                )
+            )
+
+            (eventbox
+                :onclick "kitty bluetui &"
+                :onhover "eww update bluetooth_reveal=true"
+                :onhoverlost "eww update bluetooth_reveal=false"
+                (box 
+                    :orientation "h"
+                    :space-evenly false
+                    :class "widget bluetooth" 
+                    
+                    (label :class "bluetooth icon" :text "${bluetooth == "Disconnected" ? "󰂲" : "󰂰"}")
+
+                    (revealer :transition "slideright" :reveal {bluetooth_reveal}
+                        (label :class "bluetooth text" :text "${bluetooth}")
+                    )
+                )
+            )
+
+            (eventbox
+                :onscroll "${EWW_CONFIG_DIR}/scripts/brightness {}"
+                :onhover "eww update brightness_reveal=true"
+                :onhoverlost "eww update brightness_reveal=false"
+                (box
+                    :orientation "h"
+                    :space-evenly false
+                    :class "widget brightness" 
+
+                    (label :class "brightness icon" :text "")
+
+                    (revealer :transition "slideright" :reveal {!brightness_reveal}
+                        (label :class "brightness text" :text "${brightness}%")
+                    )
+
+                    (revealer :transition "slideright" :reveal {brightness_reveal}
+                        (progress :valign "center" :class "brightness progress" :value {brightness})
+                    )
+                )
+            )
+
+            (eventbox
+                :onhover "eww update volume_reveal=true"
+                :onhoverlost "eww update volume_reveal=false"
+                :onscroll "${EWW_CONFIG_DIR}/scripts/volume {}"
+                (box
+                    :orientation "h"
+                    :space-evenly false
+                    :class "widget volume" 
+
+                    (label :class "volume icon" :text "${wp.muted ? "" : ""}")
+
+                    (revealer :transition "slideright" :reveal {!volume_reveal}
+                        (label :class "volume text" :text "${wp.volume}%")
+                    )
+
+                    (revealer :transition "slideright" :reveal {volume_reveal}
+                        (progress :valign "center" :class "volume progress" :value {wp.volume})
+                    )
+                )
+            )
+        )
+
+        (box 
+            :spacing 15
+            :space-evenly false
+            :class "widget clock"
+
+            (label :text "󰥔 ${formattime(EWW_TIME,"%H:%M %b %d, %a")}")
+            (label :text "${tomat.text}")
+        )
+
+        (box 
+            :spacing 20
+            :halign "end"
+            :space-evenly false
+
+            (box
+                :spacing 10
+                :space-evenly false
+                :class "widget battery ${round(EWW_BATTERY.BAT0.capacity,0) <= 20 ? "low" : ""} ${ EWW_BATTERY.BAT0.status == "Charging" ? "charging" : "" }"
+
+                (label 
+                    :class "battery icon"
+                    :text "${EWW_BATTERY.BAT0.status == "Charging" ? "󱐌" : (EWW_BATTERY.BAT0.capacity <= 20 ? "" : (EWW_BATTERY.BAT0.capacity <= 40 ? "" : (EWW_BATTERY.BAT0.capacity <= 60 ? "" : (EWW_BATTERY.BAT0.capacity <= 80 ? "" : ""))))}"
+                )
+
+                (label :text "${round(EWW_BATTERY.BAT0.capacity,0)}%")
+            )
+
+            (box
+                :spacing 10
+                :space-evenly false
+                :class "widget cpu" 
+
+                (label :class "cpu icon" :text "󰍛")
+                (label :text "${round(EWW_CPU.avg,0)}%")
+            )
+
+            (box
+                :spacing 10
+                :space-evenly false
+                :class "widget ram" 
+
+                (label :class "ram icon" :text "󰞯")
+                (label :text "${round(EWW_RAM.used_mem_perc,0)}%")
+            )
+
+            (box
+                :spacing 10
+                :space-evenly false
+                :class "widget disk" 
+
+                (label :class "disk icon" :text "󱛟")
+                (label :text "${round(EWW_DISK["/"].used_perc,0)}%")
+            )
+        )
+    )
+)
